@@ -1,0 +1,10 @@
+from urllib.parse import urlparse
+
+
+def extract_domain(url):
+    parsed = urlparse(url)
+    domain = parsed.netloc.lower()
+
+    domain = domain.removeprefix("www.")
+
+    return domain
