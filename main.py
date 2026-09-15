@@ -1,6 +1,8 @@
+from enrichment.parser import parse_website
+from enrichment.website import fetch_website
 from input.url_input import get_company_url
-from validation.url_validator import validate_url
 from validation.domain import extract_domain
+from validation.url_validator import validate_url
 
 
 def main():
@@ -15,6 +17,15 @@ def main():
     print(f"Received valid URL: {url}")
     print(f"Domain: {domain}")
 
+
+    html = fetch_website(url)
+
+    print(f"Downloaded: {len(html)} bytes")
+
+    page = parse_website(html)
+
+    print(f"Title: {page['title']}")
+    print(f"Text: {page['text']}")
 
 if __name__ == "__main__":
     main()
