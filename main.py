@@ -1,5 +1,15 @@
-name = "james"
-if not isinstance(name, str):
-    print("Must be a String or for the fools out there must be an word")
-else:
-    print(f"Welcome {name} u will have so much fun ")
+class Company:
+    def __init__(self, url):
+        self.url = url
+        self.domain = None
+        self.name = None
+        self.description = None
+        self.industry = None
+
+        self.technologies = []
+        self.jobs = []
+
+        self.evidence = []
+        self.insights = []
+    
+    
