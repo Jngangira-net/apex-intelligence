@@ -2,25 +2,28 @@ from enrichment.parser import parse_website
 from enrichment.website import fetch_website
 from input.url_input import get_company_url
 from models.company import Company
+from output.console_report import display_company_report
 from validation.domain import extract_domain
 from validation.technologies import detect_technologies
 from validation.url_validator import validate_url
 
 
 def main():
+    # Get company URL
     url = get_company_url()
 
+    # Validate URL
     if not validate_url(url):
         print("Invalid URL")
         return
 
+    # Create company object
     company = Company(url)
 
+    # Extract domain
     company.domain = extract_domain(url)
 
-    print(f"Received valid URL: {company.url}")
-    print(f"Domain: {company.domain}")
-
+    # Fetch website
     result = fetch_website(company.url)
 
     if not result["success"]:
@@ -29,18 +32,17 @@ def main():
 
     html = result["html"]
 
-    print(f"Downloaded: {len(html)} bytes")
-
+    # Parse website content
     page = parse_website(html)
 
     company.name = page["title"]
     company.description = page["text"]
 
+    # Detect technologies
     company.technologies = detect_technologies(html)
 
-    print(f"Title: {company.name}")
-    print(f"Text: {company.description}")
-    print(f"Technologies: {company.technologies}")
+    # Present final report
+    display_company_report(company, len(html))
 
 
 if __name__ == "__main__":
