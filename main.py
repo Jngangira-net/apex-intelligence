@@ -1,6 +1,7 @@
 from enrichment.parser import parse_website
 from enrichment.website import fetch_website
 from input.url_input import get_company_url
+from models.company import Company
 from validation.domain import extract_domain
 from validation.technologies import detect_technologies
 from validation.url_validator import validate_url
@@ -13,12 +14,14 @@ def main():
         print("Invalid URL")
         return
 
-    domain = extract_domain(url)
+    company = Company(url)
 
-    print(f"Received valid URL: {url}")
-    print(f"Domain: {domain}")
+    company.domain = extract_domain(url)
 
-    result = fetch_website(url)
+    print(f"Received valid URL: {company.url}")
+    print(f"Domain: {company.domain}")
+
+    result = fetch_website(company.url)
 
     if not result["success"]:
         print(f"Website fetch failed: {result['error']}")
@@ -30,14 +33,14 @@ def main():
 
     page = parse_website(html)
 
-    print(f"Title: {page['title']}")
-    print(f"Text: {page['text']}")
+    company.name = page["title"]
+    company.description = page["text"]
 
+    company.technologies = detect_technologies(html)
 
-
-    technologies = detect_technologies(html)
-
-    print(f"Technologies: {technologies}")
+    print(f"Title: {company.name}")
+    print(f"Text: {company.description}")
+    print(f"Technologies: {company.technologies}")
 
 
 if __name__ == "__main__":
