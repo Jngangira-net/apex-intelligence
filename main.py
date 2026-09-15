@@ -1,3 +1,5 @@
+from enrichment.identity import extract_identity
+from enrichment.industry import detect_industry
 from enrichment.parser import parse_website
 from enrichment.website import fetch_website
 from input.url_input import get_company_url
@@ -35,8 +37,12 @@ def main():
     # Parse website content
     page = parse_website(html)
 
-    company.name = page["title"]
-    company.description = page["text"]
+    identity = extract_identity(page)
+    company.name = identity["name"]
+    company.description = identity["description"]
+
+    industry = detect_industry(page["text"])
+    company.industry = industry["industry"]
 
     # Detect technologies
     company.technologies = detect_technologies(html)

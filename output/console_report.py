@@ -10,6 +10,7 @@ def display_company_report(company, downloaded_bytes):
     print("-" * 60)
     print(f"Name        : {company.name}")
     print(f"Domain      : {company.domain}")
+    print(f"Industry    : {company.industry}")
     print(f"URL         : {company.url}")
 
     print()
@@ -31,4 +32,3 @@ def display_company_report(company, downloaded_bytes):
 
     print()
     print("=" * 60)
-    
